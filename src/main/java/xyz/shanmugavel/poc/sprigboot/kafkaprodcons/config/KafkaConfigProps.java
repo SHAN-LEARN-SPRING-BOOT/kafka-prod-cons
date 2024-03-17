@@ -10,9 +10,9 @@ import lombok.Data;
 @Data
 public class KafkaConfigProps {
 
-
     private String bootstrapUrl;
     private String keySerializer;
     private String valueSerializer;
     private String topic;
+    private String consumerGroup;
 }
