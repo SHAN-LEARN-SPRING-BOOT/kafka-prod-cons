@@ -15,4 +15,5 @@ public class KafkaConfigProps {
     private String valueSerializer;
     private String topic;
     private String consumerGroup;
+    private String offset;
 }
