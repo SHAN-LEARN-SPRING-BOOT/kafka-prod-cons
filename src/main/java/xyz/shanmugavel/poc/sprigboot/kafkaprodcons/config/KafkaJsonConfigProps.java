@@ -6,10 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import lombok.Data;
 
 @Configuration
-@ConfigurationProperties(prefix = "app.kafka.config.poc")
+@ConfigurationProperties(prefix = "app.kafka.config.json-poc")
 @Data
-public class KafkaConfigProps {
-
+public class KafkaJsonConfigProps {
     private String bootstrapUrl;
     private String keySerializer;
     private String valueSerializer;

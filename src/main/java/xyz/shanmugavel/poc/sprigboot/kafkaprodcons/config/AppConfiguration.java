@@ -5,8 +5,10 @@ import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 @Slf4j
 public class AppConfiguration {
 
+
     @Autowired
     private KafkaConfigProps kafkaConfigProps;
 
@@ -36,6 +39,13 @@ public class AppConfiguration {
         log.info("Kafka Producer config={}", kafkaConfigProps);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
+    
+    @Bean
+    public KafkaTemplate<String, String> kafkaTemplate(@NonNull ProducerFactory<String, String> producerFactory) {
+        return new KafkaTemplate<>(producerFactory);
+    }
+
+    
 
 
     @Bean
@@ -43,8 +53,8 @@ public class AppConfiguration {
         Map<String, Object> configProps = new HashMap<>();
         //Bootstrap server is read fom spring.kafka.bootstrap-servers
         configProps.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaConfigProps.getConsumerGroup());
-        configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, kafkaConfigProps.getKeySerializer());
-        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, kafkaConfigProps.getValueSerializer());
+        configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, kafkaConfigProps.getKeyDeserializer());
+        configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, kafkaConfigProps.getValueDeserializer());
         configProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, kafkaConfigProps.getOffset());
         log.info("Kafka Consumer Config={}", configProps);
         return new DefaultKafkaConsumerFactory<>(configProps);
@@ -58,10 +68,7 @@ public class AppConfiguration {
     }
 
     
-    @Bean
-    public KafkaTemplate<String, String> kafkaTemplate(@NonNull ProducerFactory<String, String> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
-    }
+
 
 
 }

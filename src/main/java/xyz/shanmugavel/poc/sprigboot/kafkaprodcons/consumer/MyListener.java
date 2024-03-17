@@ -16,7 +16,7 @@ public class MyListener {
     @KafkaHandler(isDefault = true)
     public void defaultEchoMethod(ConsumerRecord<String, String> message) {
         log.info("Received message>>>>>>>>>{}={}", message.key(), message.value());
-        log.info("Headers>>>>>>>>>{}", message.headers());
+        log.debug("Headers>>>>>>>>>{}", message.headers());
         message.headers().headers("X-Author").forEach(val -> log.info("Headers >>>>>>>>>X-Author={}", new String(val.value())));
     }
 }
